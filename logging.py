@@ -9,4 +9,4 @@ def log_activity(activity):
 
 
 # example usage: log an HTTP request received by the honeypot
-log_activity('HTTP request received - GET /admin.php HTTP/1.1')
+# log_activity('HTTP request received - GET /admin.php HTTP/1.1')
