@@ -1,7 +1,7 @@
 import socket
 import sys
-from logging import *
-from packet_capture import *
+from logger import log_activity
+from packet_capture import capture_packets
 
 '''Commands:
 # To find tasks running on port: netstat -ano|findstr PORT

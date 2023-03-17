@@ -7,6 +7,5 @@ def log_activity(activity):
     with open('honeypot.log', 'a') as log_file:
         log_file.write(f'[{now}] {activity}\n')
 
-
 # example usage: log an HTTP request received by the honeypot
 # log_activity('HTTP request received - GET /admin.php HTTP/1.1')

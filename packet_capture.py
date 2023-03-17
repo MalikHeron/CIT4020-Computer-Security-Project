@@ -1,7 +1,5 @@
-from scapy.all import *
-import os
-
 from scapy.layers.inet import TCP
+from scapy.sendrecv import sniff
 
 # set up a packet capture filter
 filter = "tcp port 22"
