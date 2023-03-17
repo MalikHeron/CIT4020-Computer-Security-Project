@@ -1,6 +1,7 @@
 import socket
 import sys
 from logging import *
+from packet_capture import *
 
 '''Commands:
 # To find tasks running on port: netstat -ano|findstr PORT
@@ -60,6 +61,9 @@ while True:
     log_activity(addr)
     log_activity(addr2)
     log_activity(addr3)
+    capture_packets(addr)
+    capture_packets(addr2)
+    capture_packets(addr3)
 
     # send a fake banner
     conn.sendall(b'SSH-2.0-OpenSSH_7.9p1 Ubuntu-10ubuntu0.1\r\n')
