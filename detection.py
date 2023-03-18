@@ -1,24 +1,48 @@
+import time
+
+from flask import Flask, request, app
 import re
 
 LOG_FILE = 'honeypot.log'
 
-# define a regular expression pattern for matching HTTP request data in the log file
-REQUEST_PATTERN = re.compile(
-    r'(?P<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}).+"(?P<method>\w+) (?P<path>/.*) HTTP/1\.\d".+')
 
-# read the log file and analyze the data
-with open(LOG_FILE) as f:
-    for line in f:
-        match = REQUEST_PATTERN.match(line)
-        if match:
-            # extract the IP address, HTTP method, and path from the log data
-            ip = match.group('ip')
-            method = match.group('method')
-            path = match.group('path')
+@app.route('/login', methods=['POST'])
+def login():
+    # capture information about the incoming request
+    remote_ip = request.remote_addr
+    request_method = request.method
+    request_path = request.path
+    request_data = request.data
 
-            # check for suspicious activity
-            if method.upper() != 'GET':
-                print(f'Possible attack detected: {ip} used {method} method on {path}')
+    # log the request details to a file or database for analysis
+    with open(LOG_FILE, 'a') as log_file:
+        log_file.write(
+            f'remote_ip: {remote_ip}, method: {request_method}, path: {request_path}, data: {request_data}\n')
+    # return a fake error message to the attacker
+    return 'Invalid username or password'
 
-            if 'wp-admin' in path:
-                print(f'Possible WordPress attack detected: {ip} accessed {path}')
+
+def analyze_logs(LOG_FILE):
+    with open(LOG_FILE, 'r') as f:
+        logs = f.readlines()
+
+    for log in logs:
+        # look for suspicious activity in the logs
+        if 'ssh' in log and 'Failed password' in log:
+            # alert on failed SSH login attempts
+            send_alert('Failed SSH login attempt: {}'.format(log))
+        elif 'sudo' in log and 'COMMAND' in log and 'rm' in log:
+            # alert on sudo commands that attempt to delete files
+            send_alert('Sudo command to delete file: {}'.format(log))
+
+    # define a function to send alerts
+
+
+def send_alert(message):
+    # send an email, text message, or other notification to the security team
+    print(message)
+
+    # run the log analysis function on a schedule
+    while True:
+        analyze_logs('honeypot.log')
+        time.sleep(60)
