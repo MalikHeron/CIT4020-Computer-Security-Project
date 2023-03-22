@@ -1,4 +1,3 @@
-import threading
 import time
 
 
@@ -12,11 +11,10 @@ def check_logs_for_intrusion():
 
         for log in logs:
             # check if the log contains a failed login attempt
-            if 'Failed login' in log:
+            if 'Failed login from' in log:
                 # extract the IP address from the log
                 ip_address = log.split()[-1]
 
-                # increment the count of failed login attempts for this IP address
                 if ip_address in failed_attempts:
                     failed_attempts[ip_address] += 1
                 else:
@@ -24,13 +22,8 @@ def check_logs_for_intrusion():
 
         # check if any IP address has more than 3 failed login attempts
         for ip_address, count in failed_attempts.items():
-            if count > 3:
+            if count >= 3:
                 print(f'Possible intrusion attempt detected from IP address {ip_address}')
 
         # checks the log every 5 seconds
         time.sleep(5)
-
-
-# start the intrusion detection thread
-intrusion_detection_thread = threading.Thread(target=check_logs_for_intrusion)
-intrusion_detection_thread.start()
