@@ -1,0 +1,6 @@
+[2023-04-03 08:23:24] ('127.0.0.1', 55408)
+[2023-04-03 08:23:27] Failed login from 127.0.0.1
+[2023-04-03 08:23:28] Failed login from 127.0.0.1
+[2023-04-03 08:23:28] Failed login from 127.0.0.1
+[2023-04-03 08:23:28] 127.0.0.1 failed to authenticate after 3 attempts
+[2023-04-03 08:23:28] 2023-04-03 08:23:28 - Client 127.0.0.1 disconnected

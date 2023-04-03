@@ -1,3 +1,4 @@
+import datetime
 import os
 import time
 import platform
@@ -5,9 +6,9 @@ import smtplib
 
 
 def send_alert(ip_address):
-    sender = 'email@gmail.com'
-    receiver = 'email@gmail.com'
-    password = 'password'
+    sender = 'honeypotproject2023@gmail.com'
+    receiver = 'honeypotproject2023@gmail.com'
+    password = 'fkriuutxzsyskiaq'
     subject = f'Intrusion attempt detected from IP address {ip_address}'
     body = f'An intrusion attempt has been detected from IP address {ip_address}.'
 
@@ -76,11 +77,13 @@ def check_logs_for_intrusion():
 
         # create a report file
         with open('logs/report.txt', 'w') as report_file:
+            now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             report_file.write('Intrusion Attempts Report\n')
             report_file.write('=========================\n\n')
 
             # write the number of failed login attempts for each IP address to the report file
             for ip_address, count in failed_attempts.items():
+                report_file.write(f'{now}\n')
                 report_file.write(f'IP Address: {ip_address}\n')
                 report_file.write(f'Failed Login Attempts: {count}\n\n')
 
