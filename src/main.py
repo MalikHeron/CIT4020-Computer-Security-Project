@@ -16,6 +16,8 @@ from packet import capture_packets
 # Connect to a port: telnet localhost PORT
 # View running processes on a port: netstat -ano|findstr PORT
 # Kill a process on a port: taskkill /F /PID 19088
+# Email for alerting: honeypotproject2023@gmail.com
+# Email password: HoneyPot2023
 """
 
 
