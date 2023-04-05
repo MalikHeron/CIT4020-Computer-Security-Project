@@ -39,7 +39,7 @@ def analyze_tcp_packet(packet):
             threshold = 100
             if datetime.now() - syn_packets_start_time[src_ip] < time_period:
                 if syn_packets[src_ip] > threshold:
-                    print(f'Possible port scan attempt detected from IP address {src_ip}')
+                    print(f'\033[0;33mPossible port scan attempt detected from IP address {src_ip}\033[0m')
                     # reset the count and start time for this source IP address
                     syn_packets[src_ip] = 0
                     syn_packets_start_time[src_ip] = datetime.now()

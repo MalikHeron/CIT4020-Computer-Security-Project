@@ -13,17 +13,17 @@ def handle_connection(port):
     soc.listen(10)
 
     while True:
-        conn, addr = soc.accept()
-        print(f'Received connection from {addr[0]}:{addr[1]} on server port {port}')
-        log_activity(addr)
+        conn, address = soc.accept()
+        print(f'\033[32mReceived connection from {address[0]} on server port {port}\033[0m')
+        log_activity(f'Received connection from {address[0]} on server port {port}')
 
         # create a new thread to handle the connection
         threading.Thread(target=handle_client_connection,
-                         args=(conn, addr),
+                         args=(conn, address),
                          daemon=True).start()
 
 
-def handle_client_connection(conn, addr):
+def handle_client_connection(conn, address):
     # send a fake banner
     conn.sendall(b'SSH-2.0-OpenSSH_7.9p1 Ubuntu-10ubuntu0.1\r\n')
 
@@ -43,17 +43,17 @@ def handle_client_connection(conn, addr):
             break
         else:
             conn.sendall(b'Access denied.\r\n')
-            log_activity(f'Failed login from {addr[0]}')
+            log_activity(f'Failed login from {address[0]}')
 
     else:
         # log that the client failed to enter a valid username and password after three attempts
-        log_activity(f'{addr[0]} failed to authenticate after 3 attempts')
+        log_activity(f'{address[0]} failed to authenticate after 3 attempts')
 
     # get the current time and format it as a string
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     # log that the client has disconnected along with the time
-    log_activity(f'{now} - Client {addr[0]} disconnected')
+    log_activity(f'Client {address[0]} disconnected')
 
     # close the connection
     conn.close()
