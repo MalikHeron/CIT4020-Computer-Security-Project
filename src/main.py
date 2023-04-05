@@ -36,6 +36,8 @@ def main():
         # overwrite the original log file
         with open('logs/honeypot.log', 'w') as f:
             f.write('')
+    else:
+        open('logs/honeypot.log', 'w')
 
     try:
         threading.Thread(target=handle_connection, args=(22,), daemon=True).start()
