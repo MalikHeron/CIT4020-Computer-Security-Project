@@ -22,6 +22,10 @@ from packet import capture_packets
 
 
 def main():
+    # check if folder exists
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
+
     # check if the log file already exists
     if os.path.exists('logs/honeypot.log'):
         # get the current date and time as a string with milliseconds
