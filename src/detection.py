@@ -49,6 +49,12 @@ def check_logs_for_intrusion():
         with open('logs/honeypot.log', 'r') as log_file:
             logs = log_file.readlines()
 
+        # create a report file
+        if not os.path.exists('logs/report.txt'):
+            with open('logs/report.txt', 'w') as report_file:
+                report_file.write('Intrusion Attempts Report\n')
+                report_file.write('=========================\n\n')
+
         # create a dictionary to store the number of failed login attempts for each IP address
         failed_attempts = {}
 
@@ -68,24 +74,19 @@ def check_logs_for_intrusion():
             if count >= 3 and ip_address not in alerted_ips:
                 # print the intrusion detection message in red
                 print(f'\033[91mPossible intrusion attempt detected from IP address {ip_address}\033[0m')
+                # append to report file
+                with open('logs/report.txt', 'a') as report_file:
+                    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    report_file.write(f'{now}\n')
+                    report_file.write(f'IP Address: {ip_address}\n')
+                    report_file.write(f'Failed Login Attempts: {count}\n\n')
+
                 # block the ip address
                 block_ip(ip_address)
                 # send an email alert
                 send_alert(ip_address)
                 # add the IP address to the set of alerted IPs
                 alerted_ips.add(ip_address)
-
-        # create a report file
-        with open('logs/report.txt', 'w') as report_file:
-            now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            report_file.write('Intrusion Attempts Report\n')
-            report_file.write('=========================\n\n')
-
-            # write the number of failed login attempts for each IP address to the report file
-            for ip_address, count in failed_attempts.items():
-                report_file.write(f'{now}\n')
-                report_file.write(f'IP Address: {ip_address}\n')
-                report_file.write(f'Failed Login Attempts: {count}\n\n')
 
         # checks the log every 5 seconds
         time.sleep(5)
