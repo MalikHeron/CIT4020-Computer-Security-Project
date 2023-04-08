@@ -3,6 +3,7 @@ import os
 import time
 import platform
 import smtplib
+import subprocess
 
 
 def send_alert(ip_address):
@@ -25,20 +26,30 @@ Subject: {subject}
         server.login(sender, password)
         server.sendmail(sender, receiver, message)
         server.quit()
-        print(f'Alert sent to {receiver}')
+        print(f'\033[32mAlert sent to {receiver}\033[0m')
     except Exception as e:
-        print(f'Error sending alert: {e}')
+        print(f'\033[91mError sending alert: {e}\033[0m')
 
 
 def block_ip(ip_address):
     # check the current operating system
     if platform.system() == 'Windows':
         # use the netsh command to block the IP address on Windows
-        os.system(
-            f'netsh advfirewall firewall add rule name="Block {ip_address}" dir=in interface=any action=block remoteip={ip_address}')
+        result = subprocess.run(
+            f'netsh advfirewall firewall add rule name="Block {ip_address}" dir=in interface=any action=block remoteip={ip_address}',
+            shell=True, stdout=subprocess.PIPE)
+        if result.returncode == 0:
+            print(f'\033[32mSuccessfully blocked {ip_address}\033[0m')
+        else:
+            print(f'\033[91mFailed to block {ip_address}\033[0m')
     else:
         # use the ufw command to block the IP address on Linux
-        os.system(f'sudo ufw deny from {ip_address}')
+        result = subprocess.run(
+            f'sudo ufw deny from {ip_address}', shell=True, stdout=subprocess.PIPE)
+        if result.returncode == 0:
+            print(f'\033[32mSuccessfully blocked {ip_address}\033[0m')
+        else:
+            print(f'\033[91mFailed to block {ip_address}\033[0m')
 
 
 def check_logs_for_intrusion():
