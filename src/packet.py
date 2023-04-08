@@ -60,7 +60,7 @@ def analyze_tcp_packet(packet):
 
             if datetime.now() - syn_packets_start_time[dst_ip] < time_period:
                 if syn_packets[dst_ip] > threshold:
-                    print(f'Possible SYN flood attack detected on IP address {dst_ip}')
+                    print(f'\033[0;33mPossible SYN flood attack detected on IP address {dst_ip}\033[0m')
                     # reset the count and start time for this destination IP address
                     syn_packets[dst_ip] = 0
                     syn_packets_start_time[dst_ip] = datetime.now()
